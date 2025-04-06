@@ -1,0 +1,12 @@
+{
+  "name": "ttx-extension",
+  "version": "1.0.0",
+  "description": "![TTX Logo](icons/icon128.png)",
+  "license": "ISC",
+  "author": "antiparty",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
