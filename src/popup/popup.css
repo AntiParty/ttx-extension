@@ -17,6 +17,88 @@ header {
   margin-bottom: 20px;
 }
 
+#buyBtn, #sellBtn {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+#buyBtn {
+  background-color: #00c274;
+  color: white;
+}
+
+#sellBtn {
+  background-color: #ff5252;
+  color: white;
+}
+
+#buyBtn:hover {
+  background-color: #00a15f;
+}
+
+#sellBtn:hover {
+  background-color: #e04848;
+}
+
+.amount-control {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#shareAmount {
+  width: 50px;
+  padding: 4px;
+  background: #18181b;
+  border: 1px solid #3e3e40;
+  color: white;
+  border-radius: 4px;
+}
+
+.amount-control label {
+  font-size: 14px;
+}
+
+.amount-input {
+  width: 60px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #3e3e40;
+  background-color: #18181b;
+  color: white;
+  text-align: center;
+}
+
+/* Loading state for buttons */
+button.loading {
+  position: relative;
+  color: transparent;
+}
+
+button.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 .logo {
   width: 24px;
   height: 24px;

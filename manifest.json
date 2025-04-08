@@ -11,7 +11,12 @@
   },
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://ttx.gg/*",
+    "https://api.ttx.gg/*"
   ],
   "content_scripts": [
     {
@@ -19,9 +24,6 @@
       "js": ["src/content/content.js"],
       "css": ["src/popup/popup.css"]
     }
-  ],
-  "host_permissions": [
-    "https://api.ttx.gg/*"
   ],
   "action": {
     "default_icon": {

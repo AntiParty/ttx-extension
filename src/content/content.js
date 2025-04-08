@@ -198,6 +198,59 @@ function makeDraggable(element) {
   }
 }
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "handleTransactionPopup") {
+    const { actionType, jwtToken, amount } = message;
+    handleTransaction(
+      getUsernameFromURL(),
+      actionType,
+      amount || 1,
+      jwtToken,
+      sendResponse
+    );
+    return true;
+  }
+});
+
+async function handleTransaction(username,actionType, amount,jwtToken,sendResponse) {
+  try {
+    const safeAmount = Math.max(1, parseInt(amount) || 1);
+    
+    const url = new URL(`https://api.ttx.gg/creators/${username}/transactions`);
+    url.searchParams.append('action', actionType);
+    url.searchParams.append('amount', safeAmount);
+
+    console.log('Final request URL:', url.toString());
+
+    const response = await fetch(url.toString(), {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${jwtToken}`,
+        "Accept": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      console.error('API Error:', error);
+      throw new Error(error.message || `HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Transaction success:", data);
+    sendResponse({ success: true, data });
+    setTimeout(() => refreshAllData(), 1000);
+  } catch (error) {
+    console.error("Transaction error:", error);
+    sendResponse({ 
+      success: false,
+      error: error.message.includes("Amount") 
+        ? "Please enter at least 1 share" 
+        : error.message
+    });
+  }
+}
+
 // =======================
 // 💰  Stock Price Badge
 // =======================

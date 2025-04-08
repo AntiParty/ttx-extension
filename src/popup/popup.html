@@ -29,6 +29,11 @@
         <span>Chat Alerts</span>
       </div>
 
+      <div class="amount-control">
+        <label for="shareAmount">Shares:</label>
+        <input type="number" id="shareAmount" min="1" value="1" oninput="this.value = Math.abs(Math.floor(this.value)) || 1 "max="1000"/>
+      </div>
+
       <button id="refreshBtn" class="refresh-btn">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -43,6 +48,8 @@
         </svg>
         Refresh Data
       </button>
+      <button id="buyBtn" class="buy">Buy</button>
+      <button id="sellBtn" class="sell">Sell</button>
     </div>
 
     <script src="popup.js" type="module"></script>
