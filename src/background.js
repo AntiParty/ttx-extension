@@ -31,6 +31,9 @@ async function checkForUpdates() {
 
     const data = await response.json();
     const versionComparison = compareVersions(data.tag_name, CURRENT_VERSION);
+    console.log(
+      `[Update Check] Current version: ${CURRENT_VERSION}, Latest: ${data.tag_name}`
+    );
 
     if (versionComparison > 0) {
       console.log("[Update Check] Update available!");
@@ -84,16 +87,17 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Compare versions function remains the same
 function compareVersions(a, b) {
-  const cleanA = a.replace(/^v/, "");
-  const cleanB = b.replace(/^v/, "");
-  const partsA = cleanA.split(".").map(Number);
-  const partsB = cleanB.split(".").map(Number);
+  const cleanA = a.replace(/^v\.?/i, "");
+  const cleanB = b.replace(/^v\.?/i, "");
+  const partsA = cleanA.split(".").map((n) => parseInt(n, 10));
+  const partsB = cleanB.split(".").map((n) => parseInt(n, 10));
 
-  for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
-    const partA = partsA[i] || 0;
-    const partB = partsB[i] || 0;
-    if (partA > partB) return 1;
-    if (partA < partB) return -1;
+  const maxLen = Math.max(partsA.length, partsB.length);
+  for (let i = 0; i < maxLen; i++) {
+    const valA = partsA[i] || 0;
+    const valB = partsB[i] || 0;
+    if (valA > valB) return 1;
+    if (valA < valB) return -1;
   }
   return 0;
 }
