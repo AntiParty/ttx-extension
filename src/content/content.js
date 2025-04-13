@@ -210,7 +210,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     );
     return true;
   }
+
+  if (message.action === "updateBadgeColor") {
+    const username = getUsernameFromURL();
+    updateBadgeColorForUser(username, message.color);
+  }
 });
+
+function updateBadgeColorForUser(username, color) {
+  document.querySelectorAll(`a[href*="/${username}"]`).forEach((anchor) => {
+    const h1 = anchor.querySelector("h1");
+    if (!h1) return;
+
+    const badge = h1.querySelector(".ttx-stock-badge");
+    if (badge) {
+      badge.style.background = color;
+    }
+  });
+}
 
 async function handleTransaction(username,actionType, amount,jwtToken,sendResponse) {
   try {
@@ -266,10 +283,13 @@ function createStockBadge(price) {
     marginLeft: "10px",
     color: "white",
     fontWeight: "bold",
-    background: "linear-gradient(-45deg, #ff6b6b, #fcb045, #00d2ff, #3a7bd5)",
-    backgroundSize: "300% 300%",
-    animation: "gradientShift 5s ease infinite",
+    background: "#00c274", // default
   });
+
+  chrome.storage.sync.get("stockBadgeColor", ({ stockBadgeColor }) => {
+    badge.style.background = stockBadgeColor || "#00c274";
+  });
+
   return badge;
 }
 

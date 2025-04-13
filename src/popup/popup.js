@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tokenText = document.getElementById("tokenText");
   const buyButton = document.getElementById("buyBtn");
   const sellButton = document.getElementById("sellBtn");
+  
+  const colorPicker = document.getElementById("stockColorPicker");
+
+  const { stockBadgeColor = "#00c274" } = await chrome.storage.sync.get(["stockBadgeColor"]);
+  colorPicker.value = stockBadgeColor;
 
   await checkForExtensionUpdate();
 
@@ -33,6 +38,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     chrome.tabs.sendMessage(tab.id, {
       action: "toggleStockBadge",
       value: e.target.checked,
+    });
+  });
+
+  colorPicker.addEventListener("input", async (e) => {
+    const color = e.target.value;
+    await chrome.storage.sync.set({ stockBadgeColor: color });
+  
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.tabs.sendMessage(tab.id, {
+      action: "updateBadgeColor",
+      color,
     });
   });
 

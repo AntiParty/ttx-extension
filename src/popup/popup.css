@@ -190,6 +190,15 @@ input:checked + .slider:before {
 .refresh-btn:active svg {
   transform: rotate(360deg);
 }
+
+#stockColorPicker {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  height: 24px;
+  width: 40px;
+}
+
 /* Update Alert Styles - Matching Your Theme */
 .update-alert {
   background-color: #1f1f23;

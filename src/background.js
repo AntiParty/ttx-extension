@@ -1,5 +1,5 @@
 // ===== Version Checker with Alarm Notifications =====
-const CURRENT_VERSION = "1.1";
+const CURRENT_VERSION = "1.3";
 const VERSION_CHECK_URL =
   "https://api.github.com/repos/AntiParty/ttx-extension/releases/latest";
 const CHECK_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours for checks
