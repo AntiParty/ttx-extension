@@ -12,12 +12,16 @@
   "permissions": [
     "storage",
     "activeTab",
-    "cookies"
+    "cookies",
+    "notifications"
   ],
   "host_permissions": [
     "https://ttx.gg/*",
     "https://api.ttx.gg/*"
   ],
+  "externally_connectable": {
+    "matches": ["https://ttx.gg/*"]
+  },
   "content_scripts": [
     {
       "matches": ["*://www.twitch.tv/*"],
@@ -37,5 +41,6 @@
   },
   "background": {
     "service_worker": "src/background.js"
+    //"type": "module"
   }
 }
