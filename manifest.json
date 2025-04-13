@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TTX",
-  "version": "1.0",
+  "version": "1.1",
   "description": "View your favorite Creators Stock Live.",
   "icons": {
     "16": "icons/icon16.png",
@@ -10,18 +10,27 @@
     "128": "icons/icon128.png"
   },
   "permissions": [
+    "notifications",
     "storage",
     "activeTab",
     "cookies",
-    "notifications"
+    "notifications",
+    "alarms"
   ],
   "host_permissions": [
     "https://ttx.gg/*",
-    "https://api.ttx.gg/*"
+    "https://api.ttx.gg/*",
+    "https://api.github.com/*"
   ],
   "externally_connectable": {
     "matches": ["https://ttx.gg/*"]
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "content_scripts": [
     {
       "matches": ["*://www.twitch.tv/*"],
@@ -41,6 +50,5 @@
   },
   "background": {
     "service_worker": "src/background.js"
-    //"type": "module"
   }
 }

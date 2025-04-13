@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const buyButton = document.getElementById("buyBtn");
   const sellButton = document.getElementById("sellBtn");
 
+  await checkForExtensionUpdate();
+
+  const updateAlert = document.getElementById("updateAlert");
+  const updateVersion = document.getElementById("updateVersion");
+  const updateNowBtn = document.getElementById("updateNowBtn");
+  const updateLaterBtn = document.getElementById("updateLaterBtn");
+
   const { ttxJwt } = await chrome.storage.local.get("ttxJwt"); // Use ttxJwt from local storage
 
   // Load saved settings
@@ -27,6 +34,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       action: "toggleStockBadge",
       value: e.target.checked,
     });
+  });
+
+  updateNowBtn.addEventListener("click", () => {
+    chrome.storage.local.get(["updateData"], ({ updateData }) => {
+      if (updateData?.html_url) {
+        chrome.tabs.create({ url: updateData.html_url });
+      }
+    });
+  });
+
+  updateLaterBtn.addEventListener("click", () => {
+    updateAlert.classList.remove("show");
+    // Set reminder for 4 hours later
+    chrome.alarms.create('update-reminder', { delayInMinutes: 240 });
   });
 
   chatToggle.addEventListener("change", async (e) => {
@@ -50,50 +71,47 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   buyButton.addEventListener("click", async () => {
-    await handleTransaction("buy"); 
+    await handleTransaction("buy");
   });
 
   sellButton.addEventListener("click", async () => {
-    await handleTransaction("sell"); 
+    await handleTransaction("sell");
   });
   async function handleTransaction(action) {
     try {
-      
       const shareAmountInput = document.getElementById("shareAmount");
       let shareAmount = Math.max(1, parseInt(shareAmountInput.value) || 1);
-      
-      
+
       if (shareAmount !== parseInt(shareAmountInput.value)) {
         shareAmountInput.value = shareAmount;
       }
-  
-      
+
       const [tab] = await chrome.tabs.query({
         active: true,
         currentWindow: true,
-        url: "*://www.twitch.tv/*"
+        url: "*://www.twitch.tv/*",
       });
-  
+
       if (!tab) {
         alert("Please open this on a Twitch streamer's page");
         return;
       }
-  
+
       const { ttxJwt } = await chrome.storage.local.get("ttxJwt");
       if (!ttxJwt) {
         alert("Not logged in to TTX");
         return;
       }
-  
+
       const response = await chrome.tabs.sendMessage(tab.id, {
         action: "handleTransactionPopup",
         actionType: action,
         jwtToken: ttxJwt,
-        amount: shareAmount
+        amount: shareAmount,
       });
-  
+
       if (response?.success) {
-        alert(`${action === 'buy' ? 'Purchase' : 'Sale'} successful!`);
+        alert(`${action === "buy" ? "Purchase" : "Sale"} successful!`);
       } else {
         alert(`Failed: ${response?.error || "Unknown error"}`);
       }
@@ -102,10 +120,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       alert("Transaction failed - check console");
     }
   }
-  // Display the token in the popup
-  if (ttxJwt) {
-    tokenText.textContent = ttxJwt;
-  } else {
-    tokenText.textContent = "No token found.";
-  }
 });
+
+async function checkForExtensionUpdate() {
+  try {
+    const { updateData } = await chrome.storage.local.get(["updateData"]);
+    if (updateData) {
+      const updateAlert = document.getElementById("updateAlert");
+      const updateVersion = document.getElementById("updateVersion");
+      
+      if (updateAlert && updateVersion) {
+        updateVersion.textContent = updateData.tag_name.replace(/^v/, '');
+        updateAlert.classList.add("show");
+      }
+    }
+  } catch (error) {
+    console.error("Update check failed:", error);
+  }
+}

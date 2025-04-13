@@ -190,3 +190,77 @@ input:checked + .slider:before {
 .refresh-btn:active svg {
   transform: rotate(360deg);
 }
+/* Update Alert Styles - Matching Your Theme */
+.update-alert {
+  background-color: #1f1f23;
+  border: 1px solid #9147ff;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.update-alert.show {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.update-alert h3 {
+  color: #9147ff;
+  font-size: 14px;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.update-alert h3::before {
+  content: "🔄";
+}
+
+.update-alert p {
+  font-size: 13px;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+  color: #adadb8;
+}
+
+.update-alert .update-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.update-btn {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.update-btn.primary {
+  background-color: #9147ff;
+  color: white;
+  border: none;
+}
+
+.update-btn.primary:hover {
+  background-color: #772ce8;
+}
+
+.update-btn.secondary {
+  background-color: #26262c;
+  color: #efeff1;
+  border: 1px solid #3e3e40;
+}
+
+.update-btn.secondary:hover {
+  background-color: #2e2e35;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
